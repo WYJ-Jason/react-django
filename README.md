@@ -78,15 +78,15 @@ npm install
 npm run dev
 ```
 
-### Accessing the Application
+## Accessing the Application
 - Backend API: http://127.0.0.1:8000
 - Frontend Application: http://localhost:5173/
 
-### Contact
+## Contact
 If you have any questions or need further information, feel free to reach out:
 
 - Email: wuyanjie.jason@gmail.com
 - Phone: (+61) 476 217 002
 
-### License
+## License
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
