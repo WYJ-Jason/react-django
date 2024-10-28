@@ -75,6 +75,8 @@ const UploadFile = () => {
   };
 
   const handleSubmit = async (event) => {
+    setDataTypes({});
+    setOriginalDataTypes({});
     event.preventDefault();
     if (!file) return;
 
@@ -112,7 +114,6 @@ const UploadFile = () => {
     }
   };
 
-
   const handleConvert = async () => {
     if (!file) {
       console.error('No file available for conversion.');
@@ -148,7 +149,16 @@ const UploadFile = () => {
       } else {
         const errorData = await response.json();
         setMessage(`Conversion failed: ${errorData.error || response.statusText}`);
-        setConversionErrors(errorData.details || {}); // Set conversion errors
+
+        // Map the error details to user-friendly types
+        const mappedErrors = Object.fromEntries(
+          Object.entries(errorData.details || {}).map(([column, type]) => [
+            column,
+            typeMapping[type] || type // Map type to user-friendly name
+          ])
+        );
+
+        setConversionErrors(mappedErrors);
       }
     } catch (error) {
       console.error('Error:', error);

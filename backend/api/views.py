@@ -99,7 +99,7 @@ def convert_file(request):
                     elif expected_type == "datetime64[ns]":
                         # Handle flexible date conversion with multiple formats and dayfirst=True
                         try:
-                            df[column] = pd.to_datetime(df[column], errors='raise', dayfirst=True)  # Specify dayfirst=True
+                            df[column] = pd.to_datetime(df[column], errors='raise', dayfirst=True)
                         except ValueError:
                             for fmt in ["%d/%m/%Y", "%Y-%m-%d", "%m-%d-%Y", "%Y.%m.%d"]:
                                 try:
@@ -110,8 +110,14 @@ def convert_file(request):
                             else:
                                 raise ValueError(f"Could not parse dates in column '{column}' with any common format.")
                     elif expected_type == "Int64":
+                        # Check if the column is of type object or text before conversion
+                        if df[column].dtype == 'object':
+                            raise ValueError(f"Column '{column}' contains text or object types that cannot be converted to Int64.")
                         df[column] = pd.to_numeric(df[column], errors='coerce', downcast='integer')
                     elif expected_type == "float64":
+                        # Check if the column is of type object or text before conversion
+                        if df[column].dtype == 'object':
+                            raise ValueError(f"Column '{column}' contains text or object types that cannot be converted to float64.")
                         df[column] = pd.to_numeric(df[column], errors='coerce')  # Convert to float
                     elif expected_type == "complex128":
                         df[column] = df[column].apply(complex)

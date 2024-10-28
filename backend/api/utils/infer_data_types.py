@@ -20,7 +20,7 @@ def infer_and_convert_data_types(df, error_threshold=0.3, category_threshold=0.8
 
         # If there are no errors, and the column can be float, convert it to float
         if num_errors <= error_threshold:
-            if not df_converted.dropna().apply(lambda x: x.is_integer()).all():
+            if not (df_converted.dropna().astype(int) == df_converted.dropna()).all():
                 df[col] = df_converted.astype(float)
                 continue
 
@@ -42,12 +42,25 @@ def infer_and_convert_data_types(df, error_threshold=0.3, category_threshold=0.8
         
         # Try converting to datetime type with multiple format options
         date_patterns = [
-            r"^\d{4}-\d{2}-\d{2}$",           # YYYY-MM-DD
-            r"^\d{2}/\d{2}/\d{4}$",           # MM/DD/YYYY
-            r"^\d{2}-\d{2}-\d{4}$",           # DD-MM-YYYY
-            r"^\d{4}\.\d{2}\.\d{2}$",         # YYYY.MM.DD
-            r"^\d{4}/\d{2}/\d{2}$",           # YYYY/MM/DD
-            r"^\d{2}\s\w+\s\d{4}$",           # DD Mon YYYY
+            r"^\d{4}-\d{2}-\d{2}$",            # YYYY-MM-DD
+            r"^\d{2}/\d{2}/\d{4}$",            # MM/DD/YYYY
+            r"^\d{2}-\d{2}-\d{4}$",            # DD-MM-YYYY
+            r"^\d{4}\.\d{2}\.\d{2}$",          # YYYY.MM.DD
+            r"^\d{4}/\d{2}/\d{2}$",            # YYYY/MM/DD
+            r"^\d{2}\s\w+\s\d{4}$",            # DD Mon YYYY
+            r"^\d{1,2}/\d{1,2}/\d{4}$",        # M/D/YYYY or D/M/YYYY
+            r"^\d{4}/\d{1,2}/\d{1,2}$",        # YYYY/M/D or YYYY/D/M
+            r"^\d{1,2}-\d{1,2}-\d{4}$",        # D-M-YYYY or M-D-YYYY
+            r"^\d{4}-\d{1,2}-\d{1,2}$",        # YYYY-D-M or YYYY-M-D
+            r"^\d{1,2}\s\w+\s\d{4}$",          # D Mon YYYY
+            r"^\d{4}\s\w+\s\d{1,2}$",          # YYYY Mon D or YYYY Mon DD
+            r"^\d{1,2}\s\w+\s\d{4}$",          # D Mon YYYY or DD Mon YYYY
+            r"^\w+\s\d{1,2},\s\d{4}$",         # Mon D, YYYY
+            r"^\d{1,2}/\d{1,2}/\d{2}$",        # M/D/YY or D/M/YY
+            r"^\d{2}/\d{1,2}/\d{1,2}$",        # YY/M/D or YY/D/M
+            r"^\d{4}-\d{1,2}-\d{1,2}$",        # YYYY-M-D or YYYY-D-M
+            r"^\d{1,2}-\d{1,2}-\d{2}$",        # D-M-YY or M-D-YY
+            r"^\d{4}/\d{2}/\d{1,2}$",          # YYYY/MM/D or YYYY/MM/DD
         ]
         
         if any(df[col].str.match(pattern).any() for pattern in date_patterns):
