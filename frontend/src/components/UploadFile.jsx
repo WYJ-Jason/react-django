@@ -10,6 +10,7 @@ const UploadFile = () => {
   const [originalDataTypes, setOriginalDataTypes] = useState({});
   const [isConvertEnabled, setIsConvertEnabled] = useState(false);
   const [message, setMessage] = useState(''); // Feedback message state
+  const [messageType, setMessageType] = useState(''); // Track message type (success/error)
   const [conversionErrors, setConversionErrors] = useState({}); // Store conversion errors
 
   // Unified type mapping between inferred and Python-compatible data types
@@ -58,7 +59,7 @@ const UploadFile = () => {
         const worksheet = workbook.worksheets[0];
 
         const rows = [];
-        worksheet.eachRow((row, rowIndex) => {
+        worksheet.eachRow((row) => {
           rows.push(row.values.slice(1));
         });
 
@@ -71,6 +72,7 @@ const UploadFile = () => {
       reader.readAsArrayBuffer(selectedFile);
     } else {
       setMessage('Please upload a CSV or Excel file.'); // Update message for invalid file type
+      setMessageType('error'); // Set message type to error
     }
   };
 
@@ -104,13 +106,16 @@ const UploadFile = () => {
         setDataTypes(adjustedTypes);
         setOriginalDataTypes(adjustedTypes); // Save initial types for comparison
         setMessage('File uploaded successfully.'); // Success message
+        setMessageType('success'); // Set message type to success
       } else {
         const errorData = await response.json();
         setMessage(`Upload failed: ${errorData.error || response.statusText}`);
+        setMessageType('error'); // Set message type to error
       }
     } catch (error) {
       console.error('Error:', error);
       setMessage('Error uploading file. Please try again.'); // General error message
+      setMessageType('error'); // Set message type to error
     }
   };
 
@@ -144,11 +149,13 @@ const UploadFile = () => {
         const data = await response.json();
         console.log('Conversion successful:', data);
         setMessage('Conversion successful.'); // Success message
+        setMessageType('success'); // Set message type to success
         setConversionErrors({}); // Clear any previous errors
         setOriginalDataTypes(dataTypes);
       } else {
         const errorData = await response.json();
         setMessage(`Conversion failed: ${errorData.error || response.statusText}`);
+        setMessageType('error'); // Set message type to error
 
         // Map the error details to user-friendly types
         const mappedErrors = Object.fromEntries(
@@ -163,6 +170,7 @@ const UploadFile = () => {
     } catch (error) {
       console.error('Error:', error);
       setMessage('Error during conversion. Please try again.'); // General error message
+      setMessageType('error'); // Set message type to error
     }
   };
 
@@ -187,25 +195,27 @@ const UploadFile = () => {
         {filePreview.length > 0 && (
           <div>
             <h2>File Preview (First 5 Rows)</h2>
-            <div className="table-wrapper">
-              <table>
-                <thead>
-                  <tr>
-                    {filePreview[0].map((header, index) => (
-                      <th key={index}>{header}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {filePreview.slice(1).map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                      {row.map((cell, cellIndex) => (
-                        <td key={cellIndex}>{cell}</td>
+            <div className="table">
+              <div className="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      {filePreview[0].map((header, index) => (
+                        <th key={index}>{header}</th>
                       ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {filePreview.slice(1).map((row, rowIndex) => (
+                      <tr key={rowIndex}>
+                        {row.map((cell, cellIndex) => (
+                          <td key={cellIndex}>{cell}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}
@@ -216,28 +226,30 @@ const UploadFile = () => {
       </form>
 
       {responseData && (
-        <div>
+        <div className="inferred-data-types">
           <h2>Inferred Data Types</h2>
-          <ul>
-            {Object.entries(dataTypes).map(([column, type]) => (
-              <li key={column}>
-                <span>{column}: </span>
-                <select
-                  value={type}
-                  onChange={(e) => handleDataTypeChange(column, e)}
-                >
-                  <option value="Text">Text</option>
-                  <option value="Date">Date</option>
-                  <option value="Integer">Integer</option>
-                  <option value="Float">Float</option>
-                  <option value="Category">Category</option>
-                  <option value="True/False">True/False</option>
-                  <option value="Complex">Complex</option>
-                  <option value="Duration">Duration</option>
-                </select>
-              </li>
-            ))}
-          </ul>
+          <div className="convert-data-types">
+            <ul>
+              {Object.entries(dataTypes).map(([column, type]) => (
+                <li key={column}>
+                  <span>{column}: </span>
+                  <select
+                    value={type}
+                    onChange={(e) => handleDataTypeChange(column, e)}
+                  >
+                    <option value="Text">Text</option>
+                    <option value="Date">Date</option>
+                    <option value="Integer">Integer</option>
+                    <option value="Float">Float</option>
+                    <option value="Category">Category</option>
+                    <option value="True/False">True/False</option>
+                    <option value="Complex">Complex</option>
+                    <option value="Duration">Duration</option>
+                  </select>
+                </li>
+              ))}
+            </ul>
+          </div>
           <button
             onClick={handleConvert}
             disabled={!isConvertEnabled}
@@ -250,11 +262,11 @@ const UploadFile = () => {
 
       {/* Display feedback messages */}
       {message && (
-        <div>
-          <h2>Message</h2>
+        <div className={`message ${messageType}`}>
+          <h2>{messageType === 'success' ? 'Success' : 'Error'}</h2>
           <p>{message}</p>
           {Object.entries(conversionErrors).length > 0 && (
-            <div>
+            <div className="conversion-errors">
               <h3>Conversion Errors</h3>
               <ul>
                 {Object.entries(conversionErrors).map(([column, type]) => (

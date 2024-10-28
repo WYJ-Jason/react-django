@@ -1,143 +1,245 @@
-/* Reset some default styles */
+/* General Body Styles */
 body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f4f8;
+  color: #34495e;
+  padding: 20px;
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
 }
 
-/* Style for the main container */
-div {
-  max-width: 1500px;
-  margin: 2rem auto;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: white;
-  overflow: hidden;
-  /* Ensure no overflow from the div itself */
-}
-
-/* Title styles */
-h1 {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
+/* Headings Styles */
+h1,
 h2 {
-  font-size: 1.5rem;
-  color: #555;
-  margin-top: 2rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
 }
 
-/* Form styles */
+/* Form Container */
 form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 2rem;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
-/* File input styles */
+/* File Input Styles */
 input[type="file"] {
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  border: 2px solid #007BFF;
-  border-radius: 4px;
   width: 100%;
+  box-sizing: border-box;
+  display: block;
+  margin: 15px 0;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  font-size: 16px;
+  color: #495057;
   cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-/* Button styles */
-button {
-  background-color: #007BFF;
+input[type="file"]::before {
+  content: 'Choose File';
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  line-height: 40px;
+  text-align: center;
+  background-color: #3498db;
   color: white;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #0056b3;
+input[type="file"]:hover::before {
+  background-color: #2980b9;
 }
 
-/* List styles */
-ul {
-  list-style-type: none;
-  padding: 0;
+input[type="file"]:focus {
+  outline: none;
+  border-color: #2980b9;
 }
 
-li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0.5rem 0;
+/* Hide the original file input button */
+input[type="file"]::-webkit-file-upload-button {
+  display: none;
 }
 
-/* Select styles */
-select {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-left: 1rem;
+
+/* Table Styles */
+.table {
+  margin-top: 20px;
 }
 
-/* Table wrapper to enable horizontal scrolling */
 .table-wrapper {
-  width: 100%;
   overflow-x: auto;
-  margin-top: 1rem;
 }
 
-/* Table styles */
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 800px;
-  margin-right: 120px
-    /* Ensures the table doesn't shrink too much */
+  margin-bottom: 20px;
 }
 
 th,
 td {
-  padding: 0.75rem 1rem;
   border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
 }
 
 th {
-  background-color: #007BFF;
+  background-color: #3498db;
   color: white;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: bold;
 }
 
-td {
+tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-tr:nth-child(even) td {
-  background-color: #f2f2f2;
+tr:hover {
+  background-color: #e1f5fe;
 }
 
-tr:hover td {
-  background-color: #e0e0e0;
+/* Button Styles */
+button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  width: 100%;
+  font-size: 16px;
 }
 
-caption {
-  caption-side: top;
-  text-align: left;
-  font-size: 1.25rem;
-  color: #333;
-  margin-bottom: 0.5rem;
+button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
 }
 
 button:disabled {
-  background-color: #cccccc;
-  color: #666666;
+  background-color: #bdc3c7;
   cursor: not-allowed;
-  opacity: 0.6;
+}
+
+/* Unordered List Styles */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+/* Inferred Data Types Section */
+.inferred-data-types {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.inferred-data-types h2 {
+  margin-bottom: 15px;
+  color: #2980b9;
+}
+
+/* List of Data Types */
+.inferred-data-types ul {
+  padding: 0;
+  margin: 0;
+}
+
+.inferred-data-types li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid #d1ecf1;
+  border-radius: 5px;
+  background-color: #effdffdc;
+  margin-bottom: 10px;
+}
+
+.inferred-data-types select {
+  padding: 5px;
+  border: 1px solid #8bc3e8;
+  border-radius: 5px;
+  background-color: white;
+  transition: border-color 0.3s;
+}
+
+.inferred-data-types select:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+/* Conversion Button */
+.inferred-data-types button {
+  margin-top: 10px;
+}
+
+.convert-data-types {
+  height: 300px;
+  overflow-y: auto;
+  border: 0.5px solid #ccc;
+  padding: 10px;
+}
+
+
+/* Message Container */
+.message {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Success Message */
+.message.success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+/* Error Message */
+.message.error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+/* Info Message */
+.message.info {
+  background-color: #eaf8fe;
+  border: 1px solid #bee5eb;
+  color: #0c5460;
+}
+
+/* Message Title */
+.message h2 {
+  margin: 0;
+  font-size: 1.25em;
+}
+
+/* Message Paragraph */
+.message p {
+  margin: 5px 0;
+}
+
+/* Conversion Errors */
+.conversion-errors {
+  background-color: #f2d7d5;
+  border: 1px solid #e74c3c;
+  color: #c0392b;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
 }

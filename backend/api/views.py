@@ -110,15 +110,13 @@ def convert_file(request):
                             else:
                                 raise ValueError(f"Could not parse dates in column '{column}' with any common format.")
                     elif expected_type == "Int64":
-                        # Check if the column is of type object or text before conversion
-                        if df[column].dtype == 'object':
-                            raise ValueError(f"Column '{column}' contains text or object types that cannot be converted to Int64.")
                         df[column] = pd.to_numeric(df[column], errors='coerce', downcast='integer')
+                        if df[column].isna().mean() > 0.3:
+                            raise ValueError(f"More than 30% of the values in column '{column}' are NaN after conversion to Int64.")
                     elif expected_type == "float64":
-                        # Check if the column is of type object or text before conversion
-                        if df[column].dtype == 'object':
-                            raise ValueError(f"Column '{column}' contains text or object types that cannot be converted to float64.")
-                        df[column] = pd.to_numeric(df[column], errors='coerce')  # Convert to float
+                        df[column] = pd.to_numeric(df[column], errors='coerce')
+                        if df[column].isna().mean() > 0.3:
+                            raise ValueError(f"More than 30% of the values in column '{column}' are NaN after conversion to float64.")
                     elif expected_type == "complex128":
                         df[column] = df[column].apply(complex)
                     elif expected_type == "object":
