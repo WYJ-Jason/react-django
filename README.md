@@ -7,9 +7,9 @@ This project is a full-stack application using Next.js and Django.
 
 Before you begin, ensure your development environment meets the following prerequisites:
 
-- **Python**: 3.10.6
-- **Node.js**: 20.10.0
-- **npm**: 10.2.5
+- **Python**: 3.10.6 or higher
+- **Node.js**: 20.10.0 or higher
+- **npm**: 10.2.5 or higher
 
 ## Installation Guide
 
